@@ -49,14 +49,27 @@
                             <div>
                                 <button
                                     type="submit"
+                                    id="submitButton"
                                     class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Submit Feedback
+                                    <span id="buttonText">Submit Feedback</span>
+
+
                                 </button>
                             </div>
+
+                            <div id="responseMessage" class="hidden p-4 rounded-lg"></div>
+
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', asyno function(e) {
+            e.preventDefault();
+        })
+    </script>
 </x-app-layout>
+
