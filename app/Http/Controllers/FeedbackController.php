@@ -14,7 +14,7 @@ class FeedbackController extends Controller
             'message' => 'required|string',
         ]);
 
-        $response = Http::post('https://hook.us2.make.com/7p21km41yi7qxuv26qrc5ild3y9q4rct', [
+        $response = Http::post('https://hook.us2.make.com/anh944qtn8bo9obcjfvrs3sj2n4yne6e', [
             'name' => $validated['name'],
             'email' => $validated['email'],
             'message' => $validated['message']
