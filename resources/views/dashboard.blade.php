@@ -21,7 +21,7 @@
                                     name="name"
                                     required
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                    placeholder="John Doe">
+                                    placeholder="Enter Name">
                             </div>
 
                             <div>
@@ -32,7 +32,7 @@
                                     name="email"
                                     required
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                    placeholder="you@example.com">
+                                    placeholder="Enter your email">
                             </div>
 
                             <div>
@@ -67,65 +67,63 @@
     </div>
 
     <script>
-        document.getElementById('feedbackForm').addEventListener('submit', asyno function(e) {
-            e.preventDefault();
+    document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-            const submitButton = document.getElementById('submitButton');
-            const buttonText = document.getElementById('buttonText');
-            const spinner = document.createElement('spinner');
-            const responseMessage = document.getElementById('responseMessage');
+        const submitButton = document.getElementById('submitButton');
+        const buttonText = document.getElementById('buttonText');
+        const spinner = document.createElement('div'); // You might want to replace this with actual spinner HTML
+        const responseMessage = document.getElementById('responseMessage');
 
-            submitButton.disabled = true;
-            buttonText.textContent = 'Processing... ';
-            spinner.classList.remove('hidden');
-            responseMessage.classList.add('hidden');
+        submitButton.disabled = true;
+        buttonText.textContent = 'Processing...';
+        responseMessage.classList.add('hidden');
 
-            const payload = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                message:document.getElementById('message').value
-            }:
+        const payload = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            message: document.getElementById('message').value
+        };
 
-            try {
-                const response = await fetch('/feedback', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        ' X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify(payLoad)
-                });
+        try {
+            const response = await fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify(payload)
+            });
 
-                const data = await response.json();
+            const data = await response.json();
 
-                responseMessage.classList.remove('hidden');
-                if (response.ok && data.success) {
-                    responseMessage.className = 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg':
-                    responseMessage.innerHTML = `
-                        <strong>Success!</strong> ${data.message}
-                        <div class="mt-2">We've sent a confirmation to ${payload.email}.</div>
-                        `;
-                        this.reset();
-                } else {
-                    throw new Error(data.message || 'Failed to submit feedback');
-                }
-            } catch(error) {
-                responseMessage.className = 'p-4 mb-4 text-sm text-red-700 bg-red-100 roundeded-lg';
-                responseMessage.textContent = `Error: ${error.message}`;
-                console.error('Submission error:', error);
-            } finally {
-                submitButton.disabled = false;
-                buttonText.textContent = 'Submit Feedback';
-                spinner.classList.add('hidden');
-
-                if (responseMessage.classList.contains('hidden') === false) {
-                    setTimeout(() => {
-                        responseMessage.classList.add('hidden');
-                    }, 5000);
-                }
+            responseMessage.classList.remove('hidden');
+            if (response.ok && data.success) {
+                responseMessage.className = 'p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg';
+                responseMessage.innerHTML = `
+                    <strong>Success!</strong> ${data.message}
+                    <div class="mt-2">We've sent a confirmation to ${payload.email}.</div>
+                `;
+                document.getElementById('feedbackForm').reset();
+            } else {
+                throw new Error(data.message || 'Failed to submit feedback');
             }
-        })
-    </script>
+        } catch (error) {
+            responseMessage.className = 'p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg';
+            responseMessage.textContent = `Error: ${error.message}`;
+            console.error('Submission error:', error);
+        } finally {
+            submitButton.disabled = false;
+            buttonText.textContent = 'Submit Feedback';
+
+            if (!responseMessage.classList.contains('hidden')) {
+                setTimeout(() => {
+                    responseMessage.classList.add('hidden');
+                }, 5000);
+            }
+        }
+    });
+</script>
 </x-app-layout>
 
